@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mcbike/models/product.dart';
-import 'package:mcbike/repositories/mock_data.dart';
 
 class CartItem {
   final Product product;
@@ -37,7 +36,7 @@ class CartProvider extends ChangeNotifier {
   double getTotalPrice() {
     double total = 0;
     for (CartItem item in _cartItems) {
-      total += item.product.price * item.quantity;
+      // total += item.product.price * item.quantity;
     }
     return total;
   }

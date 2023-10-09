@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:mcbike/pages/landing_page.dart';
+import 'package:mcbike/services/product_service.dart';
 import 'package:provider/provider.dart';
 import 'package:mcbike/app_colors.dart';
 
 import 'provider/cart_provider.dart';
 
-void main() {
+void main() async {
+  final productService =
+      new ProductService(baseUrl: "https://192.168.56.1/api/product");
+  await productService.fetchProducts();
   runApp(
     ChangeNotifierProvider(
       create: (context) => CartProvider(), // Provide the CartProvider

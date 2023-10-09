@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart'; 
 import 'package:mcbike/repositories/mock_data.dart';
 import 'package:mcbike/pages/product_detail_page.dart';
+import 'package:mcbike/services/product_service.dart';
 
 
 
 class ProductPage extends StatelessWidget {
+  late ProductService _productService;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

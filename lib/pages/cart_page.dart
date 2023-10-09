@@ -21,7 +21,7 @@ class CartPage extends StatelessWidget {
               return ListTile(
                 title: Text(item.product.name),
                 subtitle: Text('${item.product.description}'),
-                trailing: Text('${item.product.price} x ${item.quantity}'),
+                // trailing: Text('${item.product.price} x ${item.quantity}'),
               );
             },
           );

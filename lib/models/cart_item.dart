@@ -1,5 +1,3 @@
-import 'package:mcbike/repositories/mock_data.dart';
-
 import 'package:mcbike/app_colors.dart';
 
 import 'package:mcbike/models/product.dart';
