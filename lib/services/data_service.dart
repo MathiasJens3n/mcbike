@@ -10,7 +10,6 @@ class DataService {
       return decodedData.map((json) => Product.fromJson(json)).toList();
     } catch (error) {
       // Handle any errors that occur while loading mock data.
-      print('Error loading mock data: $error');
       return []; // Return an empty list as a fallback.
     }
   }

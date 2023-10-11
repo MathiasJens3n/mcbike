@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mcbike/pages/products_page.dart';
-import 'package:mcbike/app_colors.dart';
 
 class LandingPage extends StatelessWidget {
   // Define the dark grey color
-  final Color almostBlackGrey = Color.fromRGBO(30, 30, 30, 1.0);
+  final Color almostBlackGrey = const Color.fromRGBO(30, 30, 30, 1.0);
+
+  const LandingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,13 +15,12 @@ class LandingPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset('assets/landing_image.png', height: 200, width: 200),  // Adjust the size as needed
-            SizedBox(height: 30),
-            Text('Welcome to Viking Motocross', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
-            SizedBox(height: 10),
-            Text('Discover the best motocross equipment!', style: TextStyle(fontSize: 18)),
-            SizedBox(height: 20),
+            const SizedBox(height: 30),
+            const Text('Welcome to Viking Motocross', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 10),
+            const Text('Discover the best motocross equipment!', style: TextStyle(fontSize: 18)),
+            const SizedBox(height: 20),
             ElevatedButton(
-              child: Text('Shop Now'),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -28,7 +28,8 @@ class LandingPage extends StatelessWidget {
                 );
               },
         
-              style: ElevatedButton.styleFrom(primary: almostBlackGrey, padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15)),
+              style: ElevatedButton.styleFrom(backgroundColor: almostBlackGrey, padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15)),
+              child: const Text('Shop Now'),
             ),
           ],
         ),

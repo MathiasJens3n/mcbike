@@ -53,9 +53,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 onPressed: () async {
                   _formKey.currentState!.validate();
                 },
-                child: Row(
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
+                  children: [
                     Icon(Icons.mail_outline),
                     SizedBox(width: 10),
                     Text("Reset Password")

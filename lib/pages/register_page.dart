@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mcbike/services/user_service.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -10,14 +11,16 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
-
-  final TextEditingController _emailController = TextEditingController();
-
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  String registerResultMessage = '';
+  final userService =
+      UserService(baseUrl: "https://192.168.56.1:5000/api/user");
+  bool succedfullyCreated = false;
 
   @override
   void dispose() {
-    _emailController.dispose();
+    _usernameController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -34,12 +37,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextFormField(
-                controller: _emailController,
-                decoration: const InputDecoration(labelText: 'Insert email'),
-                keyboardType: TextInputType.emailAddress,
+                controller: _usernameController,
+                decoration: const InputDecoration(labelText: 'Insert username'),
+                keyboardType: TextInputType.name,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Email is required';
+                    return 'username is required';
                   }
                   return null;
                 },
@@ -61,9 +64,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 },
               ),
             ),
+            Text(registerResultMessage,
+                style: TextStyle(
+                  color: succedfullyCreated ? Colors.green : Colors.red,
+                )),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 final isValid = _formKey.currentState!.validate();
+                if (isValid) {
+                  succedfullyCreated = await userService.createUser(
+                      _usernameController.text, _passwordController.text);
+                  if (succedfullyCreated) {
+                    setState(() {
+                      registerResultMessage = 'Registration Successful!';
+                    });
+                  } else {
+                    setState(() {
+                      registerResultMessage = 'Registration failed!';
+                    });
+                  }
+                }
               },
               child: const Text('Register'),
             ),

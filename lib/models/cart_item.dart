@@ -1,7 +1,4 @@
-import 'package:mcbike/app_colors.dart';
-
 import 'package:mcbike/models/product.dart';
-import  'package:mcbike/models/cart_item.dart';
 
 
 class CartItem {

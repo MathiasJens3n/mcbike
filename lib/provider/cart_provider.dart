@@ -28,6 +28,13 @@ class CartProvider extends ChangeNotifier {
 
   // Remove a product from the cart
   void removeFromCart(Product product) {
+    for (CartItem item in _cartItems) {
+      if (item.quantity > 1) {
+        item.quantity--;
+        notifyListeners();
+        return;
+      }
+    }
     _cartItems.removeWhere((item) => item.product.id == product.id);
     notifyListeners();
   }
@@ -35,9 +42,9 @@ class CartProvider extends ChangeNotifier {
   // Calculate the total price of items in the cart
   double getTotalPrice() {
     double total = 0;
-    for (CartItem item in _cartItems) {
-      // total += item.product.price * item.quantity;
-    }
+    // for (CartItem item in _cartItems) {
+    //   // total += item.product.price * item.quantity;
+    // }
     return total;
   }
 }

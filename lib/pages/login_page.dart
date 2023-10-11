@@ -1,6 +1,6 @@
+import 'package:mcbike/services/login_service.dart';
 import '../pages/register_page.dart';
 import 'package:flutter/material.dart';
-import '../pages/forgot_password_page.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -11,13 +11,17 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final LoginService _loginService =
+      LoginService(baseUrl: "https://192.168.56.1:5000/api/login");
   final _formKey = GlobalKey<FormState>();
+  String loginResultMessage = '';
+  bool authorized = false;
 
   @override
   void dispose() {
-    _emailController.dispose();
+    _usernameController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -35,12 +39,13 @@ class _LoginScreenState extends State<LoginScreen> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
-                  controller: _emailController,
-                  decoration: const InputDecoration(labelText: 'Insert email'),
-                  keyboardType: TextInputType.emailAddress,
+                  controller: _usernameController,
+                  decoration:
+                      const InputDecoration(labelText: 'Insert username'),
+                  keyboardType: TextInputType.name,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Email is required';
+                      return 'Username is required';
                     }
                     return null;
                   },
@@ -52,6 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   controller: _passwordController,
                   decoration:
                       const InputDecoration(labelText: 'Insert password'),
+                  obscureText: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Password is required';
@@ -62,22 +68,40 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                 ),
               ),
+              Text(
+                loginResultMessage,
+                style: TextStyle(
+                  color: authorized ? Colors.green : Colors.red,
+                ),
+              ),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   final isValid = _formKey.currentState!.validate();
+                  if (isValid) {
+                    authorized = await _loginService.login(
+                        _usernameController.text, _passwordController.text);
+                    if (authorized) {
+                      setState(() {
+                        loginResultMessage = 'Login Successful!';
+                      });
+                    } else {
+                      setState(() {
+                        loginResultMessage = 'Login Failed. Please try again.';
+                      });
+                    }
+                  }
                 },
                 child: const Text('Login'),
               ),
               TextButton(
                   onPressed: () {
-                    Navigator.of(context).pushNamed(RegisterScreen.id);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const RegisterScreen()),
+                    );
                   },
                   child: const Text('Don\'t have an Account?')),
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(ForgotPasswordScreen.id);
-                  }, 
-                  child: const Text('Forget Password')),
             ],
           ),
         ),

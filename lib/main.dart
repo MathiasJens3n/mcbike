@@ -1,39 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:mcbike/pages/landing_page.dart';
-import 'package:mcbike/services/product_service.dart';
+import 'package:mcbike/provider/product_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:mcbike/app_colors.dart';
 
 import 'provider/cart_provider.dart';
 
 void main() async {
-  final productService =
-      new ProductService(baseUrl: "https://192.168.56.1/api/product");
-  await productService.fetchProducts();
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => CartProvider(), // Provide the CartProvider
-      child: McBikeApp(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<CartProvider>(create: (_) => CartProvider()),
+        ChangeNotifierProvider<ProductProvider>(
+            create: (_) => ProductProvider()),
+        // Add more providers as needed
+      ],
+      child: const McBikeApp(),
     ),
   );
 }
 
 class McBikeApp extends StatelessWidget {
   // Define the dark grey color
-  final Color almostBlackGrey = Color.fromRGBO(30, 30, 30, 1.0);
+  final Color almostBlackGrey = const Color.fromRGBO(30, 30, 30, 1.0);
+
+  const McBikeApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Viking Motocross',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.red,
         visualDensity: VisualDensity.adaptivePlatformDensity,
         elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(primary: almostBlackGrey),
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
         ),
       ),
-      home: LandingPage(),
+      home: const LandingPage(),
     );
   }
 }
