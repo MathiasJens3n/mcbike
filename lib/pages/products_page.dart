@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:mcbike/provider/product_provider.dart';
@@ -8,11 +7,34 @@ import 'package:mcbike/widgets/drawer.dart';
 import 'package:mcbike/widgets/shoppingcart_appbar.dart';
 import 'package:provider/provider.dart';
 
-class ProductPage extends StatelessWidget {
+class ProductPage extends StatefulWidget {
+  const ProductPage({Key? key}) : super(key: key);
+
+  @override
+  _ProductPageState createState() => _ProductPageState();
+}
+
+class _ProductPageState extends State<ProductPage> {
   final productService =
       ProductApiService(baseUrl: "https://192.168.56.1:5000/api/product");
 
-  ProductPage({super.key});
+  @override
+  void initState() {
+    super.initState();
+    fetchProducts();
+  }
+
+  Future<void> fetchProducts() async {
+    final productProvider =
+        Provider.of<ProductProvider>(context, listen: false);
+
+    try {
+      final products = await productService.fetchAllProducts();
+      productProvider.addProducts(products);
+    } catch (error) {
+      throw Exception();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,8 +88,8 @@ class ProductPage extends StatelessWidget {
               itemBuilder: (context, index) {
                 final product = productProvider.productList[index];
                 return ListTile(
-                  leading:
-                      Image.memory(base64Decode(product.images.last.base64)),
+                  leading: Image.asset("assets/motocb2.png"),
+                  //Image.memory(base64Decode(product.images.last.base64)),
                   title: Text(product.name),
                   subtitle: Text(product.description),
                   trailing: Text('${product.price}'),

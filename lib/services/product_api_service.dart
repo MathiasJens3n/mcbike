@@ -45,4 +45,23 @@ class ProductApiService {
       throw Exception('Failed to load products from API');
     }
   }
+
+  Future<List<Product>> fetchAllProducts() async {
+    final request = await client.getUrl(Uri.parse(baseUrl));
+
+    request.headers.set('Content-Type', 'application/json');
+
+    final response = await request.close();
+
+    if (response.statusCode == 200) {
+      List responseData =
+          json.decode(await response.transform(utf8.decoder).join());
+      final products =
+          responseData.map((product) => Product.fromJson(product)).toList();
+      // Return the list of products
+      return products;
+    } else {
+      throw Exception('Failed to load products from API');
+    }
+  }
 }
