@@ -31,6 +31,7 @@ flutter:
     - assets/motocb1.avif
     - assets/motocb4.jpg
     - assets/motocb2.png
+    - assets/motocb3.avif
     #   - assets/images/   # Uncomment if directory of images
 
 flutter_icons:

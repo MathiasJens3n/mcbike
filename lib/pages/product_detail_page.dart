@@ -49,37 +49,54 @@ class ProductDetailPage extends StatelessWidget {
                 // Implement this logic using CartProvider
                 // Example: CartProvider().addToCart(product);
                 // Show a popup with a message
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text("Product Added to Cart"),
-                    content:
-                        Text("${product.name} has been added to your cart."),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop(); // Close the popup
-                        },
-                        child: const Text("Keep Shopping"),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          // Navigate to the cart page
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => CartPage()),
-                          );
-                        },
-                        child: const Text("Go to Cart"),
-                      ),
-                    ],
-                  ),
-                );
                 bool succes = await cartApiService.addToCart(product);
 
                 if (succes) {
                   cartProvider.addToCart(product);
+                  // ignore: use_build_context_synchronously
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text("Product Added to Cart"),
+                      content:
+                          Text("${product.name} has been added to your cart."),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop(); // Close the popup
+                          },
+                          child: const Text("Keep Shopping"),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            // Navigate to the cart page
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CartPage()),
+                            );
+                          },
+                          child: const Text("Go to Cart"),
+                        ),
+                      ],
+                    ),
+                  );
+                } else {
+                  // ignore: use_build_context_synchronously
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text("Could not add product to cart"),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop(); // Close the popup
+                          },
+                          child: const Text("Ok"),
+                        ),
+                      ],
+                    ),
+                  );
                 }
               },
               child: const Text("Add to Cart"),

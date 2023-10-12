@@ -1,7 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:mcbike/provider/product_provider.dart';
-import 'package:mcbike/repositories/mock_data.dart';
 import 'package:mcbike/pages/product_detail_page.dart';
 import 'package:mcbike/services/product_api_service.dart';
 import 'package:mcbike/widgets/drawer.dart';
@@ -42,10 +42,11 @@ class ProductPage extends StatelessWidget {
 
           // Scrollable Main Focus Products
           CarouselSlider(
-            items: MockData.products
-                .map((product) =>
-                    Image.asset('assets/motocb4.jpg')) // Husk at ændre
-                .toList(),
+            items: [
+              Image.asset('assets/motocb4.jpg'),
+              Image.asset('assets/motocb2.png'),
+              Image.asset('assets/landing_image.png'),
+            ],
             options: CarouselOptions(
               height: 200,
               enlargeCenterPage: true,
@@ -65,7 +66,8 @@ class ProductPage extends StatelessWidget {
               itemBuilder: (context, index) {
                 final product = productProvider.productList[index];
                 return ListTile(
-                  leading: Image.asset("assets/motocb2.png"),
+                  leading:
+                      Image.memory(base64Decode(product.images.last.base64)),
                   title: Text(product.name),
                   subtitle: Text(product.description),
                   trailing: Text('${product.price}'),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mcbike/auth/auth_service.dart';
 import 'package:mcbike/auth/claims_service.dart';
+import 'package:mcbike/pages/products_page.dart';
 import 'package:mcbike/provider/cart_provider.dart';
 import 'package:mcbike/services/order_service.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +12,31 @@ class CartPage extends StatelessWidget {
       OrderService(baseUrl: "https://192.168.56.1:5000/api/order");
   final isUserLoggedIn = AuthService.jwtToken != null ? true : false;
 
-  CartPage({super.key});
+  CartPage({Key? key}) : super(key: key);
+
+  Future<void> _showOrderConfirmationDialog(BuildContext context) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Thank you for the order!'),
+          content: const Text('Your order has been placed successfully.'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+                // Navigate to another screen
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => ProductPage(),
+                ));
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +79,7 @@ class CartPage extends StatelessWidget {
                             },
                           ),
                           const SizedBox(width: 8),
-                          Text('Total:${item.product.price * item.quantity}'),
+                          Text("${item.product.price * item.quantity}"),
                         ],
                       ),
                     ),
@@ -65,12 +90,22 @@ class CartPage extends StatelessWidget {
                 visible: isUserLoggedIn,
                 child: ElevatedButton(
                   onPressed: () async {
-                    await orderService.createOrder(claimService.userID);
-                    
+                    int orderId =
+                        await orderService.createOrder(claimService.userID);
+                    if (orderId != -1) {
+                      if (await orderService.createOrderItems(
+                          cart.cartItems, orderId)) {
+                        // ignore: use_build_context_synchronously
+                        _showOrderConfirmationDialog(context);
+                        cartProvider.cartItems.clear();
+                      }
+                    } else {
+                      // Handle the case where orderId is -1
+                    }
                   },
                   child: const Text('Order'),
                 ),
-              )
+              ),
             ],
           );
         },
